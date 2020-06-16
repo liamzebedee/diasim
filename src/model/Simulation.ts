@@ -1,6 +1,6 @@
-
-const _ = require('lodash')
-const {linear} = require('everpolate')
+import { BodyMetabolismModel } from "./BodyMetabolismModel"
+import _ from 'lodash'
+import { linear } from 'everpolate'
 
 type GlucoseFeed = BGLMeasurement[]
 
@@ -20,26 +20,7 @@ function BackgroundGlucoseEffect({ sgv, date, duration }) {
     return (duration / d[0]) * d[1]
 }
 
-export class BodyMetabolismModel {
-    public insulinSensitivity
-    public carbSensitivity
-    public insulinActive
-
-    constructor(opts) {
-        Object.assign(this, opts)
-    }
-
-    // Insulin sensitivity is the ratio of 1 insulin unit : x mmol blood glucose reduction.
-    getInsulinSensitivity(): number {
-        return this.insulinSensitivity
-    }
-
-    // Carb sensitivity is the ratio of 1g of carbs raising x mmol.
-    getCarbSensitivty(): number {
-        return this.carbSensitivity
-    }
-}
-
+// TODO: set this as default metabolism model.
 let metabolism = new BodyMetabolismModel({
     insulinSensitivity: -2.0,
     carbSensitivity: 2.9,
@@ -187,15 +168,6 @@ export const functions = {
         }
     }
 }
-
-
-// Functional enhancer.
-export const compose = (...fns) =>
-    fns.reduceRight((prevFn, nextFn) =>
-        (...args) => nextFn(prevFn(...args)),
-        value => value
-    )
-;
 
 
 class Model {
